@@ -1,140 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Vancouver Finance Company — Lenders</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vancouver Finance Company — Lenders</title>
 
-  <style>
-    :root {
-      --bg: #fff;
-      --fg: #000;
-      --muted: #666;
-      --border: #000;
-      --radius: 12px;
-    }
-    * { box-sizing: border-box; }
-    body { margin:0; color:var(--fg); background:var(--bg);
-      font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    header { position:sticky; top:0; z-index:1000; background:var(--bg);
-      border-bottom:1px solid var(--border); padding:12px 12px 8px; }
+<style>
+:root {
+  --bg:#fff;
+  --fg:#000;
+  --border:#000;
+  --muted:#666;
+  --radius:12px;
+}
+body { margin:0; background:var(--bg); font-family:-apple-system,Segoe UI,Roboto,sans-serif; color:var(--fg); }
 
-    /* Brand */
-    header .brand { text-align:center; margin:0 auto 6px; }
-    header .brand-line1 { display:block; font-size:26px; font-weight:800; }
-    header .brand-line2 { display:block; font-size:18px; font-weight:600; }
+/* Header */
+header { padding:12px; border-bottom:1px solid var(--border); position:sticky; top:0; background:#fff; z-index:10; }
+.brand { text-align:center; margin-bottom:6px;}
+.brand-line1 { font-size:26px; font-weight:800; }
+.brand-line2 { font-size:18px; font-weight:600; }
 
-    /* Search bar */
-    .search-bar { margin-top:8px; display:flex; gap:8px; }
-    .input { flex:1; border:1px solid var(--border); border-radius:8px; padding:10px; font-size:16px; }
-    .btn { border:1px solid var(--border); background:var(--bg); padding:10px 12px; border-radius:8px; cursor:pointer;}
+/* Search */
+.search-bar { display:flex; gap:8px; }
+.input { flex:1; padding:10px; border:1px solid var(--border); border-radius:8px; }
 
-    /* Quick links */
-    .quick-links {
-      padding:10px 0;
-      text-align:center;
-      border-bottom:1px solid #000;
-    }
-    .quick-links a {
-      margin:0 6px;
-      padding:6px 12px;
-      border:1px solid #000;
-      border-radius:6px;
-      text-decoration:none;
-      color:#000;
-      font-size:13px;
-    }
+/* Quick Links */
+.quick-links { text-align:center; padding:10px 0; border-bottom:1px solid #000; }
+.quick-links a {
+  padding:6px 12px; margin:0 4px;
+  border:1px solid #000; border-radius:6px;
+  color:#000; text-decoration:none; font-size:13px;
+}
 
-    /* Region strip */
-    #regionStrip {
-      display:flex; gap:6px; padding:8px 0;
-      border-bottom:1px solid var(--border);
-      justify-content:center; align-items:center;
-      overflow:hidden; flex-wrap:nowrap;
-    }
-    #regionStrip button {
-      flex:1 1 0;
-      white-space:nowrap; padding:6px 8px; font-size:12px;
-      border:1px solid var(--border); background:var(--bg); border-radius:8px;
-    }
-    #regionStrip button.active { background:#000; color:#fff; }
+/* Regions */
+#regionStrip { display:flex; gap:6px; padding:8px 0; border-bottom:1px solid #000; overflow:hidden; }
+#regionStrip button { padding:6px 8px; border:1px solid #000; background:#fff; border-radius:8px; font-size:12px; }
+#regionStrip .active { background:#000; color:#fff; }
 
-    /* Cards */
-    .container { padding:12px; max-width:900px; margin:0 auto; }
-    #list { display:grid; grid-template-columns:1fr; gap:12px; }
-    .card { background:#fff; border:1px solid var(--border);
-      border-radius:var(--radius); }
-    .card-body { padding:12px 14px; }
-    .card-title { font-size:16px; font-weight:700; margin-bottom:8px; }
+/* Cards */
+.container { max-width:900px; margin:auto; padding:12px; }
+#list { display:grid; grid-template-columns:1fr; gap:12px; }
+.card { border:1px solid #000; border-radius:10px; background:#fff; }
+.card-body { padding:12px 14px; }
+.card-title { font-size:16px; font-weight:700; margin-bottom:6px; }
+.meta { font-size:14px; line-height:1.4; }
 
-    .load-more {
-      width:100%; padding:12px; margin:12px auto 80px;
-      background:#000; color:#fff; border:0; border-radius:10px;
-      font-size:16px;
-    }
+/* Notes */
+.notes-box {
+  margin-top:8px; padding:8px;
+  background:#f7f7f7; border-left:3px solid #333;
+  font-size:13px;
+}
 
-    footer { text-align:center; padding:18px; color:var(--muted); border-top:1px solid var(--border); }
+/* Load More */
+.load-more { width:100%; padding:12px; background:#000; color:#fff; border-radius:10px; margin-top:12px; }
 
-    /* Add lender FAB */
-    .fab { position:fixed; right:16px; bottom:16px; width:56px; height:56px;
-      border-radius:50%; background:#000; color:#fff; border:none; font-size:28px;}
-
-    /* Add lender sheet */
-    .sheet { position:fixed; left:0; right:0; bottom:0; transform:translateY(100%);
-      background:#fff; border-top:1px solid var(--border);
-      border-radius:16px 16px 0 0; box-shadow:0 -8px 24px rgba(0,0,0,0.15);
-      transition:transform .3s ease; }
-    .sheet.open { transform:translateY(0%); }
-    .sheet-head { padding:14px; border-bottom:1px solid var(--border);
-      display:flex; justify-content:space-between; }
-    .sheet-body { padding:14px; }
-
-    .field { margin-bottom:10px; }
-    .label { font-size:12px; color:var(--muted); margin-bottom:4px; display:block; }
-    .text { width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; }
-    .sheet-actions { display:flex; gap:8px; margin-top:12px;}
-    .primary { background:#000; color:#fff; border:1px solid #000; }
-    .ghost { background:#fff; color:#000; border:1px solid #000; }
-  </style>
+/* Footer */
+footer { padding:20px; text-align:center; color:#666; margin-top:30px; }
+</style>
 </head>
-
 <body>
 
-  <header>
-    <div class="brand">
-      <span class="brand-line1">Vancouver</span>
-      <span class="brand-line2">Finance Company</span>
-    </div>
-
-    <div class="search-bar">
-      <input id="searchInput" class="input" placeholder="Search lenders by company name…" />
-    </div>
-
-    <!-- Quick Links -->
-    <div class="quick-links">
-      <a href="https://app.journeycapital.ca/elending?ls=rajkunwarsingh&emlredir=true" target="_blank">Journey Capital</a>
-      <a href="https://app.merchantgrowth.com/?userId=005JR00000ArwOHYAZ" target="_blank">Merchant Growth</a>
-    </div>
-
-    <div id="regionStrip"></div>
-  </header>
-
-  <div class="container">
-    <div id="list"></div>
-    <button id="loadMoreBtn" class="load-more">Load more</button>
+<header>
+  <div class="brand">
+    <span class="brand-line1">Vancouver</span>
+    <span class="brand-line2">Finance Company</span>
   </div>
 
-  <footer>© 2025 Vancouver Finance Company</footer>
+  <div class="search-bar">
+    <input id="searchInput" class="input" placeholder="Search lenders…" />
+  </div>
 
-  <button class="fab" id="fab">+</button>
+  <div class="quick-links">
+    <a href="https://app.journeycapital.ca/elending?ls=rajkunwarsingh&emlredir=true" target="_blank">Journey Capital</a>
+    <a href="https://app.merchantgrowth.com/?userId=005JR00000ArwOHYAZ" target="_blank">Merchant Growth</a>
+  </div>
 
-  <!-- Add Lender Sheet -->
-  <div class="sheet" id="sheet">
-    <div class="sheet-head">
-      <div>Add Lender</div>
-      <button class="btn" id="closeSheet">Close</button>
-    </div>
-    <div class="sheet-body">
-      <div class="field">
-        <label class="label">Company Name *</label>
-        <input class="text" id
+  <div id="regionStrip"></div>
+</header>
+
+<div class="container">
+  <div id="list"></div>
+  <button id="loadMoreBtn" class="load-more">Load more</button>
+</div>
+
+<footer>© 2025 Vancouver Finance Company</footer>
+
+
+<script>
+(function(){
+  const PAGE_SIZE = 50;
+
+  function slug(s){ return (s||"").toLowerCase().trim(); }
+  function dedupeSort(arr){
+    const map=new Map();
+    arr.forEach(l=>{ if(l.name) map.set(slug(l.name),l); });
+    return [...map.values()].sort((a,b)=>slug(a.name).localeCompare(slug(b.name)));
+  }
+
+  let lenders = [];
+  let filtered=null;
+  let shown=0;
+  let regionActive="All";
+
+  const list = document.getElementById("list");
+  const loadBtn = document.getElementById("loadMoreBtn");
+  const regionStrip = document.getElementById("regionStrip");
+  const searchInput = document.getElementById("searchInput");
+
+  // LOAD ONLINE DATABASE FROM GITHUB
+  fetch("https://irajbathla-alt.github.io/lenders-database/lenders.json")
+    .then(r=>r.json())
+    .then(data=>{
+      lenders = dedupeSort(data);
+      buildRegions();
+      render(lenders);
+      showRange(PAGE_SIZE);
+    });
+
+  function card(l){
+    return `
+      <div class="card lender-card">
+        <div class="card-body">
+          <div class="card-title">${l.name}</div>
+          <div class="meta">
+            <div><strong>Phone:</strong> ${l.phone||"—"}</div>
+            <div><strong>Regions:</strong> ${l.regions||"—"}</div>
+            <div><strong>Website:</strong> <a target="_blank" href="${l.website||"#"}">${l.website||""}</a></div>
+          </div>
+
+          ${l.notes ? `<div class="notes-box">${l.notes}</div>` : ""}
+        </div>
+      </div>`;
+  }
+
+  function render(arr){ list.innerHTML = arr.map(card).join(""); }
+
+  function showRange(to){
+    const c = document.getElementsByClassName("lender-card");
+    for(let i=0;i<c.length;i++){
+      c[i].style.display = (i<to) ? "" : "none";
+    }
+    shown = Math.min(to,c.length);
+    updateLoad();
+  }
+
+  function updateLoad(){
+    const arr = filtered || lenders;
+    loadBtn.hidden = shown >= arr.length;
+  }
+  loadBtn.onclick = ()=> showRange(shown+PAGE_SIZE);
+
+  // Regions
+  function buildRegions(){
+    const set=new Set();
+    lenders.forEach(l=> (l.regions||"").split(",").forEach(r=>{ if(r.trim()) set.add(r.trim()); }));
+
+    const arr=["All",...Array.from(set).sort()];
+    regionStrip.innerHTML = arr.map(r=>`<button data-r="${r}">${r}</button>`).join("");
+
+    regionStrip.addEventListener("click", e=>{
+      const btn=e.target.closest("button");
+      if(!btn) return;
+
+      [...regionStrip.children].forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+
+      regionActive = btn.dataset.r;
+      applyFilters();
+    });
+
+    regionStrip.querySelector("[data-r='All']").classList.add("active");
+  }
+
+  // Search + Region filters
+  function applyFilters(){
+    const q = slug(searchInput.value);
+    let base = lenders;
+
+    if(regionActive!=="All"){
+      base = base.filter(l=>(l.regions||"").toLowerCase().includes(regionActive.toLowerCase()));
+    }
+
+    if(q){
+      base = base.filter(l=> slug(l.name).includes(q));
+    }
+
+    filtered = base;
+    render(base);
+    showRange(PAGE_SIZE);
+  }
+
+  searchInput.addEventListener("input", applyFilters);
+
+})();
+</script>
+
+</body>
+</html>
