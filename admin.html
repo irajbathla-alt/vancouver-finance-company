@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VFC — Admin Dashboard</title>
+
+<style>
+:root {
+  --bg:#ffffff;
+  --fg:#000;
+  --border:#000;
+  --muted:#666;
+}
+
+body {
+  margin:0; padding:0;
+  background:#fff;
+  font-family:-apple-system,Segoe UI,Roboto,sans-serif;
+  color:#000;
+}
+
+header {
+  padding:16px;
+  border-bottom:1px solid var(--border);
+  text-align:center;
+  font-size:20px;
+  font-weight:700;
+}
+
+/* Table */
+table {
+  width:100%;
+  border-collapse:collapse;
+  margin-top:12px;
+}
+
+th, td {
+  padding:8px;
+  border:1px solid #000;
+  font-size:14px;
+}
+
+th {
+  background:#f3f3f3;
+}
+
+/* Buttons */
+.button {
+  padding:6px 12px;
+  font-size:13px;
+  border:1px solid #000;
+  border-radius:6px;
+  background:#fff;
+  cursor:pointer;
+}
+.button:hover {
+  background:#000;
+  color:#fff;
+}
+
+/* Add/Edit box */
+#formBox {
+  position:fixed;
+  left:0; right:0; bottom:0;
+  background:#fff;
+  border-top:2px solid #000;
+  padding:16px;
+  display:none;
+}
+.field { margin-bottom:10px; }
+.label { display:block; font-size:12px; margin-bottom:4px; color:#666; }
+.input { width:100%; padding:10px; border:1px solid #000; border-radius:6px; }
+
+.actions { display:flex; gap:8px; margin-top:10px; }
+.primary { background:#000; color:#fff; }
+
+/* Admin Toolbar */
+#toolbar {
+  padding:12px;
+  border-bottom:1px solid #000;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+#toolbar button {
+  padding:8px 14px;
+  border-radius:6px;
+  border:1px solid #000;
+  background:#fff;
+  cursor:pointer;
+  font-size:14px;
+}
+#toolbar button:hover {
+  background:#000;
+  color:#fff;
+}
+
+</style>
+</head>
+<body>
+
+<script>
+// ==============================
+// SIMPLE PASSWORD PROTECTION
+// ==============================
+const pass = prompt("Enter Admin Password:");
+if(pass !== "Vancouver2496#"){
+  alert("Access denied.");
+  document.body.innerHTML = "<h2 style='text-align:center;margin-top:50px;'>Access Denied</h2>";
+  throw new Error("Unauthorized");
+}
+</script>
+
+<header>Vancouver Finance Company — Admin Panel</header>
+
+<div id="toolbar">
+  <button id="addBtn">+ Add Lender</button>
+  <button id="syncBtn">Sync to GitHub</button>
+</div>
+
+<div style="padding:12px;">
+  <table id="lenderTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Regions</th>
+        <th>Website</th>
+        <th>Notes</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<!-- Add/Edit Form -->
+<div id="formBox">
+  <h3 id="formTitle">Add Lender</h3>
+
+  <div class="field">
+    <label class="label">Name *</label>
+    <input id="f_name" class="input">
+  </div>
+
+  <div class="field">
+    <label class="label">Phone</label>
+    <input id="f_phone" class="input">
+  </div>
+
+  <div class="field">
+    <label class="label">Regions</label>
+    <input id="f_regions" class="input">
+  </div>
+
+  <div class="field">
+    <label class="label">Website</label>
+    <input id="f_website" class="input">
+  </div>
+
+  <div class="field">
+    <label class="label">Notes</label>
+    <textarea id="f_notes" class="input" rows="3"></textarea>
+  </div>
+
+  <div class="actions">
+    <button class="button" id="closeForm">Cancel</button>
+    <button class="button primary" id="saveForm">Save</button>
+  </div>
+</div>
+
+<script>
+// ==========================
+// CONFIG
+// ==========================
+const API_URL = "https://script.google.com/macros/s/AKfycbzIhQWgFASRP88GtVN2And-uQLgsdz1DpnHUTOUJwNzJv1abHrdlULAu3yW4I-CBdZn/exec";
+
+// ===========================================
+// LOAD LENDERS FROM GOOGLE SHEET (GET)
+// ===========================================
+let lenders = [];
+let editMode = false;
+let editName = null;
+
+function loadLenders(){
+  fetch(API_URL)
+    .then(r=>r.json())
+    .then(data=>{
+      lenders = data;
+      renderTable();
+    });
+}
+loadLenders();
+
+function renderTable(){
+  const tbody = document.querySelector("#lenderTable tbody");
+  tbody.innerHTML = lenders.map(l => `
+    <tr>
+      <td>${l.name}</td>
+      <td>${l.phone||""}</td>
+      <td>${l.regions||""}</td>
+      <td>${l.website||""}</td>
+      <td>${l.notes||""}</td>
+      <td>
+        <button class="button" onclick="editLender('${l.name}')">Edit</button>
+        <button class="button" onclick="deleteLender('${l.name}')">Delete</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+// ==========================
+// ADD / EDIT FORM
+// ==========================
+const formBox = document.getElementById("formBox");
+document.getElementById("addBtn").onclick = ()=>{
+  editMode = false;
+  editName = null;
+  document.getElementById("formTitle").innerText = "Add Lender";
+  clearForm();
+  formBox.style.display = "block";
+};
+
+document.getElementById("closeForm").onclick = ()=> formBox.style.display = "none";
+
+function clearForm(){
+  f_name.value="";
+  f_phone.value="";
+  f_regions.value="";
+  f_website.value="";
+  f_notes.value="";
+}
+
+function editLender(name){
+  const l = lenders.find(x=>x.name===name);
+  if(!l) return;
+
+  editMode = true;
+  editName = name;
+
+  document.getElementById("formTitle").innerText = "Edit Lender";
+
+  f_name.value = l.name;
+  f_phone.value = l.phone;
+  f_regions.value = l.regions;
+  f_website.value = l.website;
+  f_notes.value = l.notes;
+
+  formBox.style.display = "block";
+}
+
+// ==========================
+// SAVE to Google Sheet
+// (POST or PUT)
+// ==========================
+document.getElementById("saveForm").onclick = ()=>{
+  const lender = {
+    name: f_name.value.trim(),
+    phone: f_phone.value.trim(),
+    regions: f_regions.value.trim(),
+    website: f_website.value.trim(),
+    notes: f_notes.value.trim()
+  };
+
+  if(!lender.name){
+    alert("Name is required");
+    return;
+  }
+
+  let method = editMode ? "PUT" : "POST";
+
+  fetch(API_URL, {
+    method: method,
+    body: JSON.stringify(lender)
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    alert(res.message);
+    formBox.style.display="none";
+    loadLenders();
+  });
+};
+
+// ==========================
+// DELETE LENDER
+// ==========================
+function deleteLender(name){
+  if(!confirm("Delete this lender?")) return;
+
+  fetch(API_URL, {
+    method:"DELETE",
+    body: JSON.stringify({ name })
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    alert(res.message);
+    loadLenders();
+  });
+}
+
+// ==========================
+// SYNC TO GITHUB JSON
+// (calls Apps Script sync function)
+// ==========================
+document.getElementById("syncBtn").onclick = ()=>{
+  fetch(API_URL + "?sync=true")
+    .then(r=>r.text())
+    .then(()=> alert("Sync requested (you must add sync trigger in script)."));
+};
+</script>
+
+</body>
+</html>
