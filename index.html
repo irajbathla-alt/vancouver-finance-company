@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vancouver Finance Company — Lenders</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --fg: #000;
+      --muted: #666;
+      --border: #000;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; color:var(--fg); background:var(--bg);
+      font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    header { position:sticky; top:0; z-index:1000; background:var(--bg);
+      border-bottom:1px solid var(--border); padding:12px 12px 8px; }
+    /* Brand two-line */
+    header .brand { display:block; text-align:center; margin:0 auto 6px; line-height:1.05; }
+    header .brand-line1 { display:block; font-size:26px; font-weight:800; letter-spacing:0.2px; }
+    header .brand-line2 { display:block; font-size:18px; font-weight:600; }
+    .search-bar { margin-top:8px; display:flex; gap:8px; }
+    .input { flex:1; border:1px solid var(--border); border-radius:8px; padding:10px; font-size:16px; }
+    .btn { border:1px solid var(--border); background:var(--bg); color:var(--fg);
+      border-radius:8px; padding:10px 12px; font-size:14px; }
+    /* Region strip */
+    #regionStrip {
+      display:flex; gap:6px; padding:8px 0; border-bottom:1px solid var(--border);
+      justify-content:center; align-items:center; flex-wrap:nowrap; overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+    #regionStrip button {
+      white-space:nowrap; padding:6px 8px; font-size:12px;
+      border:1px solid var(--border); background:var(--bg); color:var(--fg); border-radius:8px;
+    }
+    #regionStrip button.active { background:#000; color:#fff; }
+    /* Container + grid */
+    .container { padding:12px; max-width:900px; margin:0 auto; width:100%; }
+    #list { display:grid; grid-template-columns:1fr; gap:12px; }
+    .card { width:100%; background:#fff; border:1px solid var(--border);
+      border-radius:var(--radius); margin:0; transition:transform .08s ease, box-shadow .08s ease; }
+    .card:hover { transform:translateY(-1px); box-shadow:0 2px 0 rgba(0,0,0,0.9); }
+    .card-body { padding:12px 14px; }
+    .card-title { font-size:16px; font-weight:700; margin:0 0 8px; letter-spacing:0.2px; }
+    .meta { display:grid; grid-template-columns:1fr; row-gap:4px; font-size:14px; }
+    .meta a { color:var(--fg); text-decoration:none; } .meta a:hover { text-decoration:underline; }
+    .load-more { display:block; width:100%; padding:12px; margin:12px auto 80px;
+      background:#000; color:#fff; border:0; border-radius:10px; font-size:16px; max-width:420px; }
+    .load-more[hidden] { display:none; }
+    footer { text-align:center; padding:18px; color:var(--muted); border-top:1px solid var(--border); }
+    /* FAB + Sheet */
+    .fab { position:fixed; right:16px; bottom:16px; width:56px; height:56px; border-radius:50%;
+      background:#000; color:#fff; border:none; font-size:28px; line-height:0; }
+    .sheet { position:fixed; left:0; right:0; bottom:0; transform:translateY(100%);
+      background:#fff; border-top:1px solid var(--border); border-radius:16px 16px 0 0;
+      box-shadow:0 -8px 24px rgba(0,0,0,0.15); transition:transform .3s ease; }
+    .sheet.open { transform:translateY(0%); }
+    .sheet-head { padding:14px 14px 8px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+    .sheet-title { font-weight:700; }
+    .sheet-body { padding:14px; }
+    .field { margin-bottom:10px; }
+    .label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
+    .text { width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; font-size:14px; }
+    .row { display:flex; gap:8px; }
+    .row .text { flex:1; }
+    .sheet-actions { display:flex; gap:8px; margin-top:12px; }
+    .primary { background:#000; color:#fff; border:1px solid #000; }
+    .ghost { background:#fff; color:#000; border:1px solid #000; }
+    /* Grid breakpoints */
+    @media (min-width: 640px) { #list { grid-template-columns: repeat(2, 1fr); } .container { max-width:760px; } }
+    @media (min-width: 1024px) { #list { grid-template-columns: repeat(3, 1fr); } .container { max-width:1080px; } }
+  
+/* --- Layout tweaks: fit search + single-line regions --- */
+.search-bar {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+  flex-wrap: nowrap;         /* keep on one line */
+}
+.search-bar .input {
+  flex: 1 1 auto;            /* input grows/shrinks */
+  min-width: 0;              /* prevents overflow */
+}
+.search-bar .btn {
+  flex: 0 0 auto;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+
+/* Region strip: single line, compact buttons, no horizontal scroll */
+#regionStrip {
+  display: flex;
+  justify-content: space-between; /* spread buttons across width */
+  align-items: center;
+  gap: 4px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: nowrap;              /* force one line */
+  overflow: hidden;               /* no scrollbars */
+}
+#regionStrip button {
+  flex: 1 1 0;                    /* allow equal-width squeezing */
+  padding: 4px 6px;
+  font-size: clamp(10px, 2.5vw, 12px); /* scale text on small screens */
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+  border-radius: 8px;
+  white-space: nowrap;
+}
+/* Slightly reduce container side padding on very narrow devices to gain space */
+@media (max-width: 360px) {
+  .container { padding-left: 8px; padding-right: 8px; }
+  .search-bar { gap: 4px; }
+}
+
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="brand-line1">Vancouver</span>
+      <span class="brand-line2">Finance Company</span>
+    </div>
+    <div class="search-bar">
+      <input id="searchInput" class="input" placeholder="Search lenders by company name…" />
+      <button id="exportBtn" class="btn">Export</button>
+      <label class="btn" for="importInput">Import</label>
+      <input id="importInput" type="file" accept="application/json" style="display:none;" />
+    </div>
+    <div id="regionStrip"></div>
+<!-- QUICK LINKS PANEL -->
+<div style="padding:10px 0; text-align:center; border-bottom:1px solid #000;">
+  <a href="https://app.journeycapital.ca/elending?ls=rajkunwarsingh&emlredir=true"
+     target="_blank"
+     style="margin-right:10px; padding:6px 12px; border:1px solid #000; border-radius:6px; text-decoration:none; color:#000;">
+     Journey Capital
+  </a>
+
+  <a href="https://app.merchantgrowth.com/?userId=005JR00000ArwOHYAZ"
+     target="_blank"
+     style="padding:6px 12px; border:1px solid #000; border-radius:6px; text-decoration:none; color:#000;">
+     Merchant Growth
+  </a>
+</div>
+
+  </header>
+
+  <div class="container">
+    <div id="list"></div>
+    <button id="loadMoreBtn" class="load-more">Load more</button>
+  </div>
+
+  <footer>© 2025 Vancouver Finance Company. All rights reserved.</footer>
+
+  <button class="fab" id="fab" title="Add Lender">+</button>
+
+  <div class="sheet" id="sheet">
+    <div class="sheet-head">
+      <div class="sheet-title">Add Lender</div>
+      <button class="btn" id="closeSheet">Close</button>
+    </div>
+    <div class="sheet-body">
+      <div class="field">
+        <label class="label">Company Name *</label>
+        <input class="text" id="f_name" placeholder="e.g., VWR Capital" />
+      </div>
+      <div class="row">
+        <div class="field" style="flex:1;">
+          <label class="label">Phone</label>
+          <input class="text" id="f_phone" placeholder="e.g., 604-555-1234" />
+        </div>
+        <div class="field" style="flex:1;">
+          <label class="label">Regions</label>
+          <input class="text" id="f_regions" placeholder="e.g., BC, AB, ON" />
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Website</label>
+        <input class="text" id="f_website" placeholder="https://example.com" />
+      </div>
+      <div class="sheet-actions">
+        <button class="btn ghost" id="clearForm">Clear</button>
+        <button class="btn primary" id="saveLender">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    const PAGE_SIZE = 40;
+    const KEY = "vfc_lenders";
+
+    function slug(s){ return (s||"").trim().toLowerCase(); }
+    function displayUrl(u){ return (u||"").replace(/^https?:\/\//,''); }
+    function dedupeSort(arr){
+      const map = new Map();
+      (arr||[]).forEach(l => { const k = slug(l.name); if (k && !map.has(k)) map.set(k, l); });
+      return Array.from(map.values()).sort((a,b)=>slug(a.name).localeCompare(slug(b.name)));
+    }
+
+    // Elements
+    const list = document.getElementById('list');
+    const loadBtn = document.getElementById('loadMoreBtn');
+    const searchInput = document.getElementById('searchInput');
+    const regionStrip = document.getElementById('regionStrip');
+    const fab = document.getElementById('fab');
+    const sheet = document.getElementById('sheet');
+    const closeSheet = document.getElementById('closeSheet');
+    const saveBtn = document.getElementById('saveLender');
+    const clearBtn = document.getElementById('clearForm');
+    const f_name = document.getElementById('f_name');
+    const f_phone = document.getElementById('f_phone');
+    const f_regions = document.getElementById('f_regions');
+    const f_website = document.getElementById('f_website');
+    const exportBtn = document.getElementById('exportBtn');
+    const importInput = document.getElementById('importInput');
+
+    // Data
+    let lenders = [];
+
+// Load lenders from your GitHub online database
+fetch("https://irajbathla-alt.github.io/lenders-database/lenders.json")
+  .then(res => res.json())
+  .then(data => {
+    lenders = dedupeSort(data);      // sort + clean duplicates
+    render(lenders);                 // show lenders
+    buildRegions();                  // rebuild region strip
+    showRange(PAGE_SIZE);            // show first lenders
+  })
+  .catch(err => {
+    console.error("Error loading online lender database:", err);
+    alert("Unable to load lenders from online database.");
+  });
+
+
+    // State
+    let filtered = null;
+    let regionActive = 'All';
+    let shown = 0;
+
+    // Rendering
+    function card(l){
+      return `
+      <div class="card lender-card" data-name="${slug(l.name)}">
+        <div class="card-body">
+          <div class="card-title">${l.name}</div>
+          <div class="meta">
+            <div><strong>Phone:</strong> ${l.phone||'—'}</div>
+            <div><strong>Regions:</strong> ${l.regions||'—'}</div>
+            <div><strong>Website:</strong> <a href="${l.website||'#'}" target="_blank">${displayUrl(l.website)||'#'}</a></div>
+          </div>
+        </div>
+      </div>`;
+    }
+    function render(listData){ list.innerHTML = (listData||[]).map(card).join(''); }
+    function showRange(to){
+      const cards = list.getElementsByClassName('lender-card');
+      for (let i = 0; i < cards.length; i++) cards[i].style.display = (i < to) ? '' : 'none';
+      shown = Math.min(to, cards.length);
+      updateLoad();
+    }
+    function updateLoad(){
+      const active = filtered || applyRegion(lenders);
+      loadBtn.hidden = shown >= active.length || (searchInput.value.trim() !== '');
+    }
+    function loadMore(){ showRange(shown + PAGE_SIZE); }
+
+    // Filters
+    function applyRegion(arr){
+      if (regionActive === 'All') return arr;
+      const want = regionActive.toLowerCase();
+      return (arr||[]).filter(l => (l.regions||'').toLowerCase().split(',').map(s=>s.trim()).includes(want));
+    }
+    function applyFilters(){
+      const q = (searchInput.value||'').toLowerCase().trim();
+      let base = applyRegion(lenders);
+      if (q){
+        base = base.filter(l => (l.name||'').toLowerCase().includes(q));
+        filtered = base;
+        render(base);
+        showRange(base.length);
+      } else {
+        filtered = null;
+        render(base);
+        showRange(Math.max(PAGE_SIZE, shown || PAGE_SIZE));
+      }
+    }
+
+    // Region strip
+    function buildRegions(){
+      const set = new Set();
+      (lenders||[]).forEach(l => {
+        (l.regions||'').split(',').forEach(p => { const t = p.trim(); if (t) set.add(t); });
+      });
+      const regions = ['All', ...Array.from(set).sort()];
+      regionStrip.innerHTML = regions.map(r => `<button data-region="${r}">${r}</button>`).join('');
+      function setActive(r){
+        regionActive = r;
+        Array.from(regionStrip.querySelectorAll('button')).forEach(b => {
+          b.classList.toggle('active', b.getAttribute('data-region') === regionActive);
+        });
+        applyFilters();
+      }
+      regionStrip.addEventListener('click', (e)=>{
+        const btn = e.target.closest('button[data-region]');
+        if (!btn) return;
+        setActive(btn.getAttribute('data-region'));
+      });
+      setActive('All');
+    }
+
+    // Add lender
+    function addLender(l){
+      if (!l || !l.name) return;
+      lenders.push({ name: l.name, phone: l.phone||'—', website: l.website||'#', regions: l.regions||'—' });
+      lenders = dedupeSort(lenders);
+      try { localStorage.setItem(KEY, JSON.stringify(lenders)); } catch(e) {}
+      // rebuild regions in case new regions were introduced
+      buildRegions();
+      applyFilters();
+    }
+    window.addLender = addLender;
+
+    // Events
+    loadBtn.addEventListener('click', loadMore);
+    searchInput.addEventListener('input', applyFilters);
+
+    const openSheet = () => sheet.classList.add('open');
+    const closeSheetFn = () => sheet.classList.remove('open');
+    const clearFormFn = () => { f_name.value=''; f_phone.value=''; f_regions.value=''; f_website.value=''; };
+    fab.addEventListener('click', openSheet);
+    closeSheet.addEventListener('click', closeSheetFn);
+    clearBtn.addEventListener('click', clearFormFn);
+   saveBtn.addEventListener("click", () => {
+  const lender = {
+    name: f_name.value.trim(),
+    phone: f_phone.value.trim(),
+    website: f_website.value.trim(),
+    regions: f_regions.value.trim()
+  };
+
+  if (!lender.name) {
+    alert("Company name is required");
+    return;
+  }
+
+  fetch("https://script.google.com/macros/s/AKfycbzIhQWgFASRP88GtVN2And-uQLgsdz1DpnHUTOUJwNzJv1abHrdlULAu3yW4I-CBdZn/exec", {
+    method: "POST",
+    contentType: "application/json",
+    body: JSON.stringify(lender)
+  })
+  .then(res => res.json())
+  .then(response => {
+    alert("Lender added to database!");
+    clearFormFn();
+    closeSheetFn();
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Error adding lender.");
+  });
+});
+    // Export / Import
+    exportBtn.addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(dedupeSort(lenders), null, 2)], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'lenders.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+    importInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const arr = JSON.parse(reader.result);
+          if (Array.isArray(arr)) {
+            lenders = dedupeSort([...(lenders||[]), ...arr]);
+            try { localStorage.setItem(KEY, JSON.stringify(lenders)); } catch(e) {}
+            buildRegions();
+            applyFilters();
+            alert('Imported ' + arr.length + ' lenders.');
+          } else {
+            alert('Invalid JSON format.');
+          }
+        } catch(err) { alert('Failed to import JSON.'); }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
+
+    // Init
+    render(lenders);
+    buildRegions();
+    showRange(PAGE_SIZE);
+  })();
+  </script>
+</body>
+</html>
