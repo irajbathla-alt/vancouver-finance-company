@@ -230,23 +230,24 @@ eligibilityForm.addEventListener("submit",e=>{
   document.getElementById("continueBtn").onclick = () => go(page1,page2);
 });
 
-leadForm.addEventListener("submit",e=>{
+leadForm.addEventListener("submit", e => {
   e.preventDefault();
 
   const data = new URLSearchParams({
-    business: business.value,
-    name: name.value,
-    phone: phone.value,
-    email: email.value,
-    tier: tierInput.value,
-    score: scoreInput.value
+    business: document.getElementById("business").value,
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value,
+    tier: document.getElementById("tier").value,
+    score: document.getElementById("score").value
   });
 
-  fetch(scriptURL,{method:"POST",body:data});
+  fetch(scriptURL, { method: "POST", body: data });
 
   alert("Thank you. Your information has been received.");
   leadForm.reset();
 });
+
 </script>
 
 </body>
