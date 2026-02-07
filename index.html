@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raj Bathla × Vancouver Finance Company</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+body{background:#fff;color:#111;}
+.container{max-width:420px;margin:0 auto;padding:24px 20px 60px;text-align:center;}
+
+h3{font-weight:500;font-size:20px;line-height:1.4;}
+h2{font-weight:500;font-size:18px;margin:18px 0;}
+p{font-size:14px;color:#444;}
+
+button{
+  width:100%;margin-top:20px;padding:14px;
+  background:#111;color:#fff;border:none;
+  font-size:15px;font-weight:500;border-radius:4px;
+  cursor:pointer;
+}
+
+.progress{
+  display:flex;justify-content:space-between;
+  font-size:12px;color:#999;margin-bottom:12px;
+}
+.progress span.active{color:#111;font-weight:500;}
+
+label{
+  font-size:13px;font-weight:500;
+  display:block;margin-top:12px;text-align:left;
+}
+select,input{
+  width:100%;padding:10px;margin-top:6px;
+  border:1px solid #ccc;border-radius:4px;
+}
+
+.hidden{display:none;}
+.section{opacity:0;transform:translateY(14px);transition:.4s ease;}
+.section.active{opacity:1;transform:translateY(0);}
+
+.divider{width:60%;height:1px;background:#111;margin:16px auto;}
+
+.tier-box{
+  border:1px solid #ddd;padding:16px;margin-top:16px;text-align:left;
+}
+.tier-a{border-left:4px solid #2f855a;}
+.tier-b{border-left:4px solid #d69e2e;}
+.tier-c{border-left:4px solid #c53030;}
+
+.back{
+  margin-top:12px;
+  background:#fff;color:#111;
+  border:1px solid #ccc;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- FRONT -->
+<div id="frontPage" class="section active">
+  <div class="progress">
+    <span class="active">Intro</span>
+    <span>Eligibility</span>
+    <span>Details</span>
+  </div>
+
+  <h3>Raj Bathla<br>×<br>Vancouver Finance Company</h3>
+  <h2 style="color:#c53030;">Small Business Financing Options</h2>
+
+  <div><strong>Term Loans</strong><p>(Fixed repayment)</p></div>
+  <div class="divider"></div>
+  <div><strong>Flex Funds</strong><p>(Based on daily sales)</p></div>
+  <div class="divider"></div>
+  <div><strong>Lines of Credit</strong><p>(Pay only what you use)</p></div>
+
+  <p style="margin-top:20px;font-weight:500;">Get Approved Within 24–48 Hrs</p>
+  <button id="startBtn">Check Eligibility</button>
+</div>
+
+<!-- ELIGIBILITY -->
+<div id="page1" class="section hidden">
+  <div class="progress">
+    <span>Intro</span>
+    <span class="active">Eligibility</span>
+    <span>Details</span>
+  </div>
+
+  <h2>Eligibility Check</h2>
+
+  <form id="eligibilityForm">
+
+    <label>Business Industry</label>
+    <select id="industry" required>
+      <option value="">Select</option>
+      <option value="restaurant">Restaurant / Café</option>
+      <option value="retail">Retail</option>
+      <option value="construction">Construction / Trades</option>
+      <option value="medical">Medical / Clinic</option>
+      <option value="professional">Professional Services</option>
+      <option value="travel">Travel Agency</option>
+      <option value="financial">Financial Services</option>
+      <option value="trucking">Owner-Operator Trucking</option>
+    </select>
+
+    <label>Time in Business</label>
+    <select id="time" required>
+      <option value="">Select</option>
+      <option value="12+">12+ months</option>
+      <option value="6-11">6–11 months</option>
+      <option value="under-6">Under 6 months</option>
+    </select>
+
+    <label>Monthly Revenue</label>
+    <select id="revenue" required>
+      <option value="">Select</option>
+      <option value="25+">$25,000+</option>
+      <option value="10-24">$10,000–$24,999</option>
+      <option value="under-10">Below $10,000</option>
+    </select>
+
+    <label>Estimated Credit Score</label>
+    <select id="credit" required>
+      <option value="">Select</option>
+      <option value="600+">600+</option>
+      <option value="500-599">500–599</option>
+      <option value="below-500">Below 500</option>
+    </select>
+
+    <button type="submit">Check Eligibility</button>
+    <button type="button" class="back" id="backToIntro">Back</button>
+  </form>
+
+  <div id="result" class="hidden"></div>
+</div>
+
+<!-- DETAILS -->
+<div id="page2" class="section hidden">
+  <div class="progress">
+    <span>Intro</span>
+    <span>Eligibility</span>
+    <span class="active">Details</span>
+  </div>
+
+  <h2>Your Details</h2>
+
+  <form id="leadForm">
+    <input type="hidden" id="tier">
+    <input type="hidden" id="score">
+
+    <label>Business Name</label>
+    <input id="business" required>
+
+    <label>Name</label>
+    <input id="name" required>
+
+    <label>Phone</label>
+    <input id="phone" required>
+
+    <label>Email</label>
+    <input id="email" required>
+
+    <button type="submit">Submit</button>
+    <button type="button" class="back" id="backToEligibility">Back</button>
+  </form>
+</div>
+
+</div>
+
+<script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbxqvRdFTUynTIhWn0h2aU5W1jouIs369XrmkZGGKBPkeursr4_UBIrlwtmdzsdBjStO/exec";
+
+const frontPage = document.getElementById("frontPage");
+const page1 = document.getElementById("page1");
+const page2 = document.getElementById("page2");
+const result = document.getElementById("result");
+const tierInput = document.getElementById("tier");
+const scoreInput = document.getElementById("score");
+
+function go(from,to){
+  from.classList.remove("active");
+  setTimeout(()=>{
+    from.classList.add("hidden");
+    to.classList.remove("hidden");
+    setTimeout(()=>to.classList.add("active"),20);
+  },300);
+}
+
+document.getElementById("startBtn").onclick = () => go(frontPage,page1);
+document.getElementById("backToIntro").onclick = () => go(page1,frontPage);
+document.getElementById("backToEligibility").onclick = () => go(page2,page1);
+
+eligibilityForm.addEventListener("submit",e=>{
+  e.preventDefault();
+
+  let score=0,tier="C";
+  const restricted=["travel","financial","trucking"];
+
+  if(restricted.includes(industry.value)){
+    result.innerHTML="<div class='tier-box tier-c'><strong>Limited Pre-Qualification</strong><p>This industry is not eligible for this program.</p></div>";
+    result.classList.remove("hidden");
+    return;
+  }
+
+  if(credit.value==="600+")score+=3;
+  if(credit.value==="500-599")score+=1;
+  if(revenue.value==="25+")score+=3;
+  if(revenue.value==="10-24")score+=2;
+  if(time.value==="12+")score+=2;
+  if(time.value==="6-11")score+=1;
+
+  tier = score>=7 ? "A" : score>=4 ? "B" : "C";
+  tierInput.value = tier;
+  scoreInput.value = score;
+
+  result.innerHTML =
+    `<div class="tier-box tier-${tier.toLowerCase()}">
+      <strong>${tier==="A"?"Strong":"Conditional"} Pre-Qualification (Tier ${tier})</strong>
+      <p>Proceed to the next step.</p>
+      <button id="continueBtn">Continue</button>
+    </div>`;
+
+  result.classList.remove("hidden");
+  document.getElementById("continueBtn").onclick = () => go(page1,page2);
+});
+
+leadForm.addEventListener("submit",e=>{
+  e.preventDefault();
+
+  const data = new URLSearchParams({
+    business: business.value,
+    name: name.value,
+    phone: phone.value,
+    email: email.value,
+    tier: tierInput.value,
+    score: scoreInput.value
+  });
+
+  fetch(scriptURL,{method:"POST",body:data});
+
+  alert("Thank you. Your information has been received.");
+  leadForm.reset();
+});
+</script>
+
+</body>
+</html>
