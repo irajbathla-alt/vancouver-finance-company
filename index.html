@@ -1,254 +1,44 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Raj Bathla × Vancouver Finance Company</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Fast, flexible Canadian small-business financing options.">
+<title>Vancouver Finance Company | Business Financing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-body{background:#fff;color:#111;}
-.container{max-width:420px;margin:0 auto;padding:24px 20px 60px;text-align:center;}
-
-h3{font-weight:500;font-size:20px;line-height:1.4;}
-h2{font-weight:500;font-size:18px;margin:18px 0;}
-p{font-size:14px;color:#444;}
-
-button{
-  width:100%;margin-top:20px;padding:14px;
-  background:#111;color:#fff;border:none;
-  font-size:15px;font-weight:500;border-radius:4px;
-  cursor:pointer;
-}
-
-.progress{
-  display:flex;justify-content:space-between;
-  font-size:12px;color:#999;margin-bottom:12px;
-}
-.progress span.active{color:#111;font-weight:500;}
-
-label{
-  font-size:13px;font-weight:500;
-  display:block;margin-top:12px;text-align:left;
-}
-select,input{
-  width:100%;padding:10px;margin-top:6px;
-  border:1px solid #ccc;border-radius:4px;
-}
-
-.hidden{display:none;}
-.section{opacity:0;transform:translateY(14px);transition:.4s ease;}
-.section.active{opacity:1;transform:translateY(0);}
-
-.divider{width:60%;height:1px;background:#111;margin:16px auto;}
-
-.tier-box{
-  border:1px solid #ddd;padding:16px;margin-top:16px;text-align:left;
-}
-.tier-a{border-left:4px solid #2f855a;}
-.tier-b{border-left:4px solid #d69e2e;}
-.tier-c{border-left:4px solid #c53030;}
-
-.back{
-  margin-top:12px;
-  background:#fff;color:#111;
-  border:1px solid #ccc;
-}
+:root{--ink:#071713;--green:#0f7b5a;--mint:#b9f5dc;--cream:#f4f3ec;--white:#fff;--muted:#68726e;--line:#dce2de;--shadow:0 24px 70px #07171322}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{min-height:100vh;background:var(--cream);color:var(--ink);font-family:"DM Sans",sans-serif}button,input,select{font:inherit}button{cursor:pointer}
+.shell{width:min(1180px,calc(100% - 32px));margin:auto;padding:24px 0 50px}.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:25px}.brand{display:flex;align-items:center;gap:11px;font:800 16px Manrope,sans-serif;letter-spacing:-.03em}.mark{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:var(--ink);color:var(--mint);font-size:12px;letter-spacing:.06em}.secure{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13px;font-weight:600}.secure:before{content:"";width:8px;height:8px;border-radius:50%;background:#35b980;box-shadow:0 0 0 5px #35b9801c}
+.app{display:grid;grid-template-columns:minmax(0,1fr) minmax(380px,500px);min-height:680px;background:#fff;border:1px solid #07171312;border-radius:30px;overflow:hidden;box-shadow:var(--shadow)}
+.story{position:relative;padding:64px;display:flex;flex-direction:column;justify-content:space-between;background:var(--ink);color:#fff;overflow:hidden}.story:after{content:"";position:absolute;width:400px;height:400px;border:1px solid #b9f5dc33;border-radius:50%;right:-170px;top:-110px;box-shadow:0 0 0 65px #b9f5dc0a,0 0 0 130px #b9f5dc08}
+.eyebrow{color:var(--mint);font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase}.eyebrow:before{content:"";display:inline-block;width:24px;height:1px;margin:0 9px 3px 0;background:currentColor}h1{max-width:630px;margin:22px 0;font:800 clamp(42px,5vw,68px)/1.02 Manrope,sans-serif;letter-spacing:-.055em}.lead{max-width:560px;color:#ffffffad;font-size:17px;line-height:1.7}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:46px}.stat{padding:17px 14px;border:1px solid #ffffff20;border-radius:16px;background:#ffffff0b}.stat strong{display:block;color:var(--mint);font:700 18px Manrope,sans-serif}.stat span{display:block;margin-top:5px;color:#ffffff99;font-size:11px}.quote{padding-top:24px;border-top:1px solid #ffffff20;color:#ffffffaa;font-size:13px;line-height:1.6}
+.panel{padding:48px;display:flex;align-items:center;background:linear-gradient(145deg,#fff,#fafcf9)}.step{display:none;width:100%;animation:enter .45s cubic-bezier(.22,1,.36,1)}.step.active{display:block}@keyframes enter{from{opacity:0;transform:translateY(14px)}}.progress{display:flex;justify-content:space-between;align-items:center;margin-bottom:34px}.count{font-size:12px;font-weight:700;color:var(--green);letter-spacing:.08em;text-transform:uppercase}.dots{display:flex;gap:7px}.dot{width:7px;height:7px;border-radius:20px;background:#dce2de}.dot.active{width:24px;background:var(--green)}
+h2{font:800 clamp(29px,4vw,40px)/1.12 Manrope,sans-serif;letter-spacing:-.04em}.sub{margin:12px 0 28px;color:var(--muted);font-size:15px;line-height:1.55}.products{display:grid;gap:10px;margin:25px 0}.product{display:flex;align-items:center;gap:14px;padding:15px;border:1px solid var(--line);border-radius:16px;transition:.25s}.product:hover{transform:translateX(4px);border-color:#0f7b5a55;background:#f8fcfa}.icon{display:grid;place-items:center;flex:0 0 40px;height:40px;border-radius:12px;background:#e6f8f0;color:var(--green);font-weight:800}.product strong{display:block;font-size:14px}.product span{display:block;margin-top:3px;color:var(--muted);font-size:12px}
+.btn{width:100%;padding:15px 18px;border:0;border-radius:14px;background:var(--ink);color:#fff;font-weight:700;transition:.25s;box-shadow:0 10px 25px #07171324}.btn:hover{transform:translateY(-2px);background:var(--green)}.secondary{margin-top:10px;background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}.secondary:hover{background:#f2f5f2}.micro{margin-top:14px;text-align:center;color:var(--muted);font-size:11px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.full{grid-column:1/-1}label{display:block;margin-bottom:7px;font-size:12px;font-weight:700;color:#39443f}select,input{width:100%;min-height:48px;padding:0 13px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);outline:none;transition:.2s}select:focus,input:focus{border-color:var(--green);box-shadow:0 0 0 4px #0f7b5a18}.actions{margin-top:22px}.result{margin-top:20px;padding:20px;border:1px solid var(--line);border-radius:16px;background:#f4f8f5;text-align:left}.result strong{font:700 17px Manrope,sans-serif}.result p{margin:7px 0 16px;color:var(--muted);font-size:13px;line-height:1.5}.result.a{border-left:4px solid var(--green)}.result.b{border-left:4px solid #b57b12}.result.c{border-left:4px solid #bb3f4d}.hidden{display:none!important}.legal{margin-top:13px;color:#89918d;font-size:10px;line-height:1.5}.success{text-align:center}.check{display:grid;place-items:center;width:66px;height:66px;margin:0 auto 22px;border-radius:50%;background:#e2f8ee;color:var(--green);font-size:28px}
+@media(max-width:900px){.app{grid-template-columns:1fr}.story{padding:48px;min-height:470px}.panel{padding:44px}.quote{display:none}}@media(max-width:560px){.shell{width:calc(100% - 20px);padding-top:14px}.nav{margin-bottom:14px}.brand{font-size:14px}.secure{font-size:11px}.app{border-radius:22px}.story{padding:34px 25px;min-height:430px}.story h1{font-size:42px}.lead{font-size:15px}.stats{margin-top:30px}.stat{padding:13px 9px}.stat strong{font-size:15px}.panel{padding:34px 24px;min-height:560px}.grid{grid-template-columns:1fr}.full{grid-column:auto}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
-
-<body>
-
-<div class="container">
-
-<!-- FRONT -->
-<div id="frontPage" class="section active">
-  <div class="progress">
-    <span class="active">Intro</span>
-    <span>Eligibility</span>
-    <span>Details</span>
-  </div>
-
-  <h3>Raj Bathla<br>×<br>Vancouver Finance Company</h3>
-  <h2 style="color:#c53030;">Small Business Financing Options</h2>
-
-  <div><strong>Term Loans</strong><p>(Fixed repayment)</p></div>
-  <div class="divider"></div>
-  <div><strong>Flex Funds</strong><p>(Based on daily sales)</p></div>
-  <div class="divider"></div>
-  <div><strong>Lines of Credit</strong><p>(Pay only what you use)</p></div>
-
-  <p style="margin-top:20px;font-weight:500;">Get Approved Within 24–48 Hrs</p>
-  <button id="startBtn">Check Eligibility</button>
-</div>
-
-<!-- ELIGIBILITY -->
-<div id="page1" class="section hidden">
-  <div class="progress">
-    <span>Intro</span>
-    <span class="active">Eligibility</span>
-    <span>Details</span>
-  </div>
-
-  <h2>Eligibility Check</h2>
-
-  <form id="eligibilityForm">
-
-    <label>Business Industry</label>
-    <select id="industry" required>
-      <option value="">Select</option>
-      <option value="restaurant">Restaurant / Café</option>
-      <option value="retail">Retail</option>
-      <option value="construction">Construction / Trades</option>
-      <option value="medical">Medical / Clinic</option>
-      <option value="professional">Professional Services</option>
-      <option value="travel">Travel Agency</option>
-      <option value="financial">Financial Services</option>
-      <option value="trucking">Owner-Operator Trucking</option>
-    </select>
-
-    <label>Time in Business</label>
-    <select id="time" required>
-      <option value="">Select</option>
-      <option value="12+">12+ months</option>
-      <option value="6-11">6–11 months</option>
-      <option value="under-6">Under 6 months</option>
-    </select>
-
-    <label>Monthly Revenue</label>
-    <select id="revenue" required>
-      <option value="">Select</option>
-      <option value="25+">$25,000+</option>
-      <option value="10-24">$10,000–$24,999</option>
-      <option value="under-10">Below $10,000</option>
-    </select>
-
-    <label>Estimated Credit Score</label>
-    <select id="credit" required>
-      <option value="">Select</option>
-      <option value="600+">600+</option>
-      <option value="500-599">500–599</option>
-      <option value="below-500">Below 500</option>
-    </select>
-
-    <button type="submit">Check Eligibility</button>
-    <button type="button" class="back" id="backToIntro">Back</button>
-  </form>
-
-  <div id="result" class="hidden"></div>
-</div>
-
-<!-- DETAILS -->
-<div id="page2" class="section hidden">
-  <div class="progress">
-    <span>Intro</span>
-    <span>Eligibility</span>
-    <span class="active">Details</span>
-  </div>
-
-  <h2>Your Details</h2>
-
-  <form id="leadForm">
-    <input type="hidden" id="tier">
-    <input type="hidden" id="score">
-
-    <label>Business Name</label>
-    <input id="business" required>
-
-    <label>Name</label>
-    <input id="name" required>
-
-    <label>Phone</label>
-    <input id="phone" required>
-
-    <label>Email</label>
-    <input id="email" required>
-
-    <button type="submit">Submit</button>
-    <button type="button" class="back" id="backToEligibility">Back</button>
-  </form>
-</div>
-
-</div>
-
+<body><main class="shell">
+<nav class="nav"><div class="brand"><span class="mark">VFC</span><span>Vancouver Finance Company</span></div><div class="secure">Secure application</div></nav>
+<section class="app">
+<aside class="story"><div><span class="eyebrow">Business financing, simplified</span><h1>Capital built around your business.</h1><p class="lead">Explore flexible funding options through one quick eligibility check—designed for Canadian business owners who need clarity and speed.</p><div class="stats"><div class="stat"><strong>24–48h</strong><span>Typical decision window</span></div><div class="stat"><strong>One form</strong><span>Multiple funding options</span></div><div class="stat"><strong>Flexible</strong><span>Solutions for real businesses</span></div></div></div><p class="quote">Straightforward guidance. Practical financing options. A process that respects your time.</p></aside>
+<div class="panel">
+<section class="step active" id="intro"><div class="progress"><span class="count">Step 1 of 3</span><div class="dots"><i class="dot active"></i><i class="dot"></i><i class="dot"></i></div></div><h2>Find the right way forward.</h2><p class="sub">Answer four quick questions to see which financing tier may fit your business.</p><div class="products"><div class="product"><span class="icon">01</span><div><strong>Term Loans</strong><span>Predictable, fixed repayments</span></div></div><div class="product"><span class="icon">02</span><div><strong>Flex Funds</strong><span>Repayment aligned with sales</span></div></div><div class="product"><span class="icon">03</span><div><strong>Business Lines of Credit</strong><span>Access funds as you need them</span></div></div></div><button class="btn" id="startBtn">Check my eligibility →</button><p class="micro">Takes about 60 seconds • No obligation</p></section>
+<section class="step" id="eligibility"><div class="progress"><span class="count">Step 2 of 3</span><div class="dots"><i class="dot"></i><i class="dot active"></i><i class="dot"></i></div></div><h2>Tell us about your business.</h2><p class="sub">This helps us identify your preliminary financing tier.</p>
+<form id="eligibilityForm"><div class="grid"><div class="full"><label for="industry">Business industry</label><select id="industry" required><option value="">Choose an industry</option><option value="restaurant">Restaurant / Café</option><option value="retail">Retail</option><option value="construction">Construction / Trades</option><option value="medical">Medical / Clinic</option><option value="professional">Professional Services</option><option value="travel">Travel Agency</option><option value="financial">Financial Services</option><option value="trucking">Owner-Operator Trucking</option></select></div><div><label for="time">Time in business</label><select id="time" required><option value="">Select</option><option value="12+">12+ months</option><option value="6-11">6–11 months</option><option value="under-6">Under 6 months</option></select></div><div><label for="revenue">Monthly revenue</label><select id="revenue" required><option value="">Select</option><option value="25+">$25,000+</option><option value="10-24">$10,000–$24,999</option><option value="under-10">Below $10,000</option></select></div><div class="full"><label for="credit">Estimated credit score</label><select id="credit" required><option value="">Select a range</option><option value="600+">600+</option><option value="500-599">500–599</option><option value="below-500">Below 500</option></select></div></div><div class="actions"><button class="btn" type="submit">View my result →</button><button class="btn secondary" type="button" data-back="intro">Back</button></div></form><div id="result" class="hidden"></div></section>
+<section class="step" id="details"><div class="progress"><span class="count">Step 3 of 3</span><div class="dots"><i class="dot"></i><i class="dot"></i><i class="dot active"></i></div></div><h2>Let’s connect.</h2><p class="sub">Share your details and our financing team can review the next steps with you.</p>
+<form id="leadForm"><input type="hidden" id="tier"><input type="hidden" id="score"><div class="grid"><div class="full"><label for="business">Business name</label><input id="business" autocomplete="organization" required></div><div class="full"><label for="name">Full name</label><input id="name" autocomplete="name" required></div><div><label for="phone">Phone</label><input id="phone" type="tel" autocomplete="tel" required></div><div><label for="email">Email</label><input id="email" type="email" autocomplete="email" required></div></div><div class="actions"><button class="btn" type="submit" id="submitBtn">Submit securely →</button><button class="btn secondary" type="button" data-back="eligibility">Back</button></div><p class="legal">By submitting, you consent to being contacted regarding business financing options. Eligibility results are preliminary and do not constitute an approval or commitment to lend.</p></form></section>
+<section class="step success" id="success"><div class="check">✓</div><h2>We’ve received your information.</h2><p class="sub">Thank you. A member of our team will review your details and follow up with you.</p><button class="btn secondary" id="restartBtn">Start another check</button></section>
+</div></section></main>
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxqvRdFTUynTIhWn0h2aU5W1jouIs369XrmkZGGKBPkeursr4_UBIrlwtmdzsdBjStO/exec";
-
-const frontPage = document.getElementById("frontPage");
-const page1 = document.getElementById("page1");
-const page2 = document.getElementById("page2");
-const result = document.getElementById("result");
-const tierInput = document.getElementById("tier");
-const scoreInput = document.getElementById("score");
-
-function go(from,to){
-  from.classList.remove("active");
-  setTimeout(()=>{
-    from.classList.add("hidden");
-    to.classList.remove("hidden");
-    setTimeout(()=>to.classList.add("active"),20);
-  },300);
-}
-
-document.getElementById("startBtn").onclick = () => go(frontPage,page1);
-document.getElementById("backToIntro").onclick = () => go(page1,frontPage);
-document.getElementById("backToEligibility").onclick = () => go(page2,page1);
-
-eligibilityForm.addEventListener("submit",e=>{
-  e.preventDefault();
-
-  let score=0,tier="C";
-  const restricted=["travel","financial","trucking"];
-
-  if(restricted.includes(industry.value)){
-    result.innerHTML="<div class='tier-box tier-c'><strong>Limited Pre-Qualification</strong><p>This industry is not eligible for this program.</p></div>";
-    result.classList.remove("hidden");
-    return;
-  }
-
-  if(credit.value==="600+")score+=3;
-  if(credit.value==="500-599")score+=1;
-  if(revenue.value==="25+")score+=3;
-  if(revenue.value==="10-24")score+=2;
-  if(time.value==="12+")score+=2;
-  if(time.value==="6-11")score+=1;
-
-  tier = score>=7 ? "A" : score>=4 ? "B" : "C";
-  tierInput.value = tier;
-  scoreInput.value = score;
-
-  result.innerHTML =
-    `<div class="tier-box tier-${tier.toLowerCase()}">
-      <strong>${tier==="A"?"Strong":"Conditional"} Pre-Qualification (Tier ${tier})</strong>
-      <p>Proceed to the next step.</p>
-      <button id="continueBtn">Continue</button>
-    </div>`;
-
-  result.classList.remove("hidden");
-  document.getElementById("continueBtn").onclick = () => go(page1,page2);
-});
-
-leadForm.addEventListener("submit", e => {
-  e.preventDefault();
-
-  const data = new URLSearchParams({
-    business: document.getElementById("business").value,
-    name: document.getElementById("name").value,
-    phone: document.getElementById("phone").value,
-    email: document.getElementById("email").value,
-    tier: document.getElementById("tier").value,
-    score: document.getElementById("score").value
-  });
-
-  fetch(scriptURL, { method: "POST", body: data });
-
-  alert("Thank you. Your information has been received.");
-  leadForm.reset();
-});
-
-</script>
-
-</body>
-</html>
+const scriptURL="https://script.google.com/macros/s/AKfycbxqvRdFTUynTIhWn0h2aU5W1jouIs369XrmkZGGKBPkeursr4_UBIrlwtmdzsdBjStO/exec";
+const steps=[...document.querySelectorAll(".step")],show=id=>{steps.forEach(s=>s.classList.toggle("active",s.id===id));window.scrollTo({top:0,behavior:"smooth"})};
+document.getElementById("startBtn").onclick=()=>show("eligibility");document.querySelectorAll("[data-back]").forEach(b=>b.onclick=()=>show(b.dataset.back));
+const eligibilityForm=document.getElementById("eligibilityForm"),result=document.getElementById("result");
+eligibilityForm.onsubmit=e=>{e.preventDefault();let score=0,tier="C";const industry=document.getElementById("industry").value,time=document.getElementById("time").value,revenue=document.getElementById("revenue").value,credit=document.getElementById("credit").value;if(["travel","financial","trucking"].includes(industry)){result.className="result c";result.innerHTML="<strong>Limited pre-qualification</strong><p>This industry is not eligible for this specific program. Other financing solutions may still be available.</p>";return}if(credit==="600+")score+=3;if(credit==="500-599")score+=1;if(revenue==="25+")score+=3;if(revenue==="10-24")score+=2;if(time==="12+")score+=2;if(time==="6-11")score+=1;tier=score>=7?"A":score>=4?"B":"C";document.getElementById("tier").value=tier;document.getElementById("score").value=score;result.className="result "+tier.toLowerCase();result.innerHTML='<strong>'+(tier==="A"?"Strong":"Conditional")+' pre-qualification · Tier '+tier+'</strong><p>Your answers indicate a potential fit. Continue to share your details for a fuller review.</p><button class="btn" type="button" id="continueBtn">Continue →</button>';document.getElementById("continueBtn").onclick=()=>show("details")};
+document.getElementById("leadForm").onsubmit=async e=>{e.preventDefault();const btn=document.getElementById("submitBtn");btn.disabled=true;btn.textContent="Submitting…";const data=new URLSearchParams({business:document.getElementById("business").value,name:document.getElementById("name").value,phone:document.getElementById("phone").value,email:document.getElementById("email").value,tier:document.getElementById("tier").value,score:document.getElementById("score").value});try{await fetch(scriptURL,{method:"POST",body:data,mode:"no-cors"});e.target.reset();show("success")}catch(err){btn.disabled=false;btn.textContent="Try again →";alert("We could not submit your information. Please try again.")}};
+document.getElementById("restartBtn").onclick=()=>{eligibilityForm.reset();result.className="hidden";result.innerHTML="";show("intro")};
+</script></body></html>
