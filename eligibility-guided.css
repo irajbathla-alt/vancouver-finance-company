@@ -1196,9 +1196,23 @@ body{background:#fff!important}
 .container{background:#fff!important}
 .guided-question h3,.result-title{color:#111!important}
 .guided-progress i{background:linear-gradient(90deg,#222,#777)!important;box-shadow:none!important}
-.guided-choice,.guided-choices.compact .guided-choice,.amount-options .guided-choice{color:#f8f8f8!important;background:linear-gradient(180deg,#222,#111)!important;border-color:#424242!important}
-.guided-choice.selected{background:linear-gradient(180deg,#3a3a3a,#111)!important;border-color:#888!important}
-.guided-choice.exact-choice{background:#fff!important;color:#333!important;border-color:#aaa!important}
+/* Unified light palette: all four steps match the Restaurant / Café card. */
+.guided-choice,.guided-choices.compact .guided-choice,.amount-options .guided-choice{
+  color:#151515!important;
+  border:1px solid #ddd!important;
+  background:linear-gradient(150deg,#fff,#ededed)!important;
+  box-shadow:0 14px 30px rgba(0,0,0,.08),0 1px 0 rgba(255,255,255,.9) inset!important;
+}
+.guided-choice.selected,.guided-choices.compact .guided-choice.selected,.amount-options .guided-choice.selected{
+  color:#111!important;
+  border-color:#999!important;
+  background:linear-gradient(150deg,#fff,#e6e6e6)!important;
+  box-shadow:0 0 0 2px rgba(0,0,0,.04),0 14px 30px rgba(0,0,0,.09)!important;
+}
+.guided-choice.exact-choice{background:linear-gradient(150deg,#fff,#ededed)!important;color:#555!important;border-color:#ddd!important}
+@media(hover:hover) and (pointer:fine){
+ .guided-choice:hover{color:#111!important;border-color:#aaa!important;background:linear-gradient(150deg,#fff,#e8e8e8)!important}
+}
 .industry-deck-card{background:linear-gradient(150deg,#fff,#ededed)!important;color:#111!important;border-color:#ddd!important;box-shadow:0 20px 45px rgba(0,0,0,.10)!important}
 .industry-deck-card strong{color:#151515!important}
 .industry-card-label,.industry-card-action{color:#555!important}
